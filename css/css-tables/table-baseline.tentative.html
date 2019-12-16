@@ -1,0 +1,109 @@
+<!doctype html>
+<script src='/resources/testharness.js'></script>
+<script src='/resources/testharnessreport.js'></script>
+<script src="/resources/check-layout-th.js"></script>
+<meta name="flags" content="ahem">
+<link rel="stylesheet" type="text/css" href="/fonts/ahem.css" />
+<link rel="author" title="Aleks Totic" href="atotic@chromium.org" />
+<link rel="help" href="https://drafts.csswg.org/css-tables-3/" />
+<link rel="help" href="https://www.w3.org/TR/CSS2/visudet.html#propdef-vertical-align" />
+<style>
+  .container {
+    position: relative;
+    outline: black dotted 1px;
+    height: 100px;
+    width: 400px;
+    font: 50px/1 Ahem; /* baseline is 40px */
+  }
+  .target {
+    display:inline-block;
+    background:gray;
+    width:20px;
+    height:40px;
+    vertical-align: baseline;
+  }
+  table {
+    display: inline-table;
+    border: 15px solid green;
+    width: 0px;
+    height: 0px;
+    vertical-align:baseline;
+    border-spacing: 0;
+  }
+  .bordersized {
+    display: inline-block;
+    border: 5px solid rgba(0,255,0, 0.5);
+  }
+  .csssized {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: rgba(0,255,0, 0.5);
+  }
+  td {
+    padding: 0;
+  }
+</style>
+<p>Standard font example</p>
+<div id="one" class="container" style="font: 50px/1 fixed">
+  Xp<table>
+  </table>
+</div>
+<p>Empty table's baseline is bottom of table's border box.</p>
+<div id="two" class="container">
+  Xp<table data-offset-y="10">
+  </table>
+</div>
+<p>Empty body's baseline is bottom of table's border box.</p>
+<div id="three" class="container">
+  Xp<table data-offset-y="10">
+    <tbody>
+    </tbody>
+  </table>
+</div>
+<p>Empty row's baseline is center of the row.</p>
+<div id="four" class="container">
+  Xp<table data-offset-y="25">
+    <tbody>
+      <tr></tr>
+    </tbody>
+  </table>
+</div>
+<p>First row defines baseline even if empty.</p>
+<div id="five" class="container">
+  Xp<table style="font: 12px fixed" data-offset-y="25">
+    <tbody>
+      <tr></tr>
+      <tr><td>1,0</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Table's vertical-align: top.</p>
+<div id="six" class="container">
+  Xp<table style="vertical-align:top" data-offset-y="0"></table>
+</div>
+<p>Table's vertical-align: middle. </p>
+<div id="seven" class="container">
+  Xp<table style="vertical-align:middle" data-offset-y="5"></table>
+</div>
+<p>Table's vertical-align: bottom. </p>
+<div id="eight" class="container">
+  Xp<table style="vertical-align:bottom" data-offset-y="20"></table>
+</div>
+<p>Table's top/middle/bottom combined. </p>
+<div id="nine" class="container">
+  Xp<table style="vertical-align:top" data-offset-y="0"></table>
+  <table style="vertical-align:middle" data-offset-y="5"></table>
+  <table style="vertical-align:bottom" data-offset-y="20"></table>
+</div>
+<script>
+  checkLayout("#one");
+  checkLayout("#two");
+  checkLayout("#three");
+  checkLayout("#four");
+  checkLayout("#five");
+  checkLayout("#six");
+  checkLayout("#seven");
+  checkLayout("#eight");
+  checkLayout("#nine");
+</script>

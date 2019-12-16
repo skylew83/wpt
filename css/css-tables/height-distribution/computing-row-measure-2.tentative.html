@@ -1,0 +1,134 @@
+<!doctype html>
+<script src='/resources/testharness.js'></script>
+<script src='/resources/testharnessreport.js'></script>
+<script src="/resources/check-layout-th.js"></script>
+<link rel='stylesheet' href='../support/base.css' />
+<link rel="author" title="Aleks Totic" href="atotic@chromium.org" />
+<link rel="help" href="https://drafts.csswg.org/css-tables-3/#row-layout" />
+<link rel="help" href="https://github.com/w3c/csswg-drafts/issues/4418" />
+<style>
+  table {
+    border-collapse: collapse;
+    background: #DDD;
+  }
+  td {
+    padding: 0;
+  }
+  .sizer {
+    width: 30px;
+    height: 100px;
+    background: #444;
+  }
+  tbody tr:nth-child(1) td:nth-child(1) {
+    background: #AAA;
+  }
+  tbody tr:nth-child(2) td:nth-child(1) {
+    background: #999;
+  }
+  tbody tr:nth-child(3) td:nth-child(1) {
+    background: #777;
+  }
+</style>
+<h1>Tests for redistribution of tall cell heights (rowspan > 1).</h1>
+<p>1) Unconstrained rows are redistributed proportionally. Rows are constrained if their height is fixed, or percent.</p>
+<table id="one">
+  <tbody>
+    <tr data-expected-height="50">
+      <td>0,0</td><td rowspan="2"><div class="sizer"></div></td>
+    </tr>
+    <tr data-expected-height="50">
+      <td>0,1</td>
+    </tr>
+</table>
+<p>2) Constrained fixed rows do not grow if there are unconstrained ones</p>
+<table id="two">
+  <tbody>
+    <tr style="height: 30px" data-expected-height="30">
+      <td>0,0 30px</td><td rowspan="2"><div class="sizer"></div></td>
+    </tr>
+    <tr data-expected-height="70">
+      <td>0,1</td>
+    </tr>
+</table>
+<p>3) Constrained percentage rows grow like unconstrained ones because percentage resolution size is undefined.</p>
+<table id="three">
+  <tbody>
+    <tr style="height: 30%" data-expected-height="50">
+      <td>0,0 30%</td><td rowspan="2"><div class="sizer"></div></td>
+    </tr>
+    <tr data-expected-height="50">
+      <td>0,1</td>
+    </tr>
+</table>
+<p>4) Constrained rows grow proportionally to their size.</p>
+<table id="four">
+  <tbody>
+    <tr style="height: 20px" data-expected-height="25">
+      <td>0,0</div></td><td rowspan="3"><div class="sizer"></div></td>
+    </tr>
+    <tr style="height: 20px" data-expected-height="25">
+      <td>0,1</td>
+    </tr>
+    <tr style="height: 40px" data-expected-height="50">
+      <td>0,1</td>
+    </tr>
+</table>
+<p>5) Percentage rows with zero height do not grow.</p>
+<table id="five">
+  <tbody>
+    <tr data-expected-height="50"><td>0,0</td><td rowspan="3"><div class="sizer"></div></td></tr>
+    <tr style="height:10%;background:red" data-expected-height="0"></tr>
+    <tr data-expected-height="50">
+      <td>2,0</td>
+    </tr>
+</table>
+<p>6) Unconstrained rows with zero height do not grow.</p>
+<table id="six">
+  <tbody>
+    <tr data-expected-height="50">
+      <td>0,0</td><td rowspan="3"><div class="sizer"></div></td>
+    </tr>
+    <tr data-expected-height="50">
+      <td>0,1</td>
+    </tr>
+    <tr data-expected-height="0">
+    </tr>
+</table>
+<p>7) Unconstrained rows are redistributed proportionally</p>
+<table id="seven">
+  <tbody>
+    <tr data-expected-height="75">
+      <td><div style="height:30px">0,0</div></td><td rowspan="2"><div class="sizer"></div></td>
+    </tr>
+    <tr data-expected-height="25">
+      <td><div style="height:10px">0,1</div></td>
+    </tr>
+</table>
+<p>8) Rowspans that span non-existent rows are ignored.</p>
+<table id="eight">
+  <tbody data-expected-height="100">
+    <tr>
+      <td data-expected-height="50">0,0</td>
+      <td data-expected-height="100"rowspan="5"><div style="height:100px;width:5px;background:yellow"></div></td>
+    </tr>
+    <tr>
+      <td data-expected-height="50">1,0</td>
+    </tr>
+    <tr data-expected-height="0"></tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>body 2</td>
+    </tr>
+  </tbody>
+</table>
+<script>
+  checkLayout("#one");
+  checkLayout("#two");
+  checkLayout("#three");
+  checkLayout("#four");
+  checkLayout("#five");
+  checkLayout("#six");
+  checkLayout("#seven");
+  checkLayout("#eight");
+</script>

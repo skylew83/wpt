@@ -163,7 +163,7 @@ function checkExpectedValues(t, node, prefix)
 
 var testNumber = 0;
 
-window.checkLayout = function(selectorList, callDone = true)
+window.checkLayout = function(selectorList, callDone = true, highlightError = true)
 {
     if (!selectorList) {
         console.error("You must provide a CSS selector of nodes to check.");
@@ -182,6 +182,14 @@ window.checkLayout = function(selectorList, callDone = true)
                 checkedLayout |= checkSubtreeExpectedValues(t, node, prefix);
                 passed = true;
             } finally {
+                if (!passed && highlightError) {
+                    if (!document.querySelector('#testharness_error_css')) {
+                        var style = document.createElement('style');
+                        style.setAttribute('id', '#testharness_error_css');
+                        style.appendChild(document.createTextNode('.testharness_error { background: rgba(255,0,0,0.5); }'));
+                    }
+                    node.classList.set('testharness_error');
+                }
                 checkedLayout |= !passed;
             }
         }, selectorList + ' ' + String(++testNumber));

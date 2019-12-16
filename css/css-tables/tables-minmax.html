@@ -1,0 +1,39 @@
+<!doctype html>
+<script src='/resources/testharness.js'></script>
+<script src='/resources/testharnessreport.js'></script>
+<script src="/resources/check-layout-th.js"></script>
+<link rel='stylesheet' href='../support/base.css' />
+<link rel="author" title="Aleks Totic" href="atotic@chromium.org" />
+<link rel="help" href="https://drafts.csswg.org/css-tables-3/" />
+
+<style>
+.cb {
+  width: 200px;
+  height: 150px;
+  border: 10px solid gray;
+}
+table {
+  position: absolute;
+  background: green;
+  border-spacing: 0;
+}
+td {
+  padding:0;
+}
+.content {
+  width:100px;
+  height:100px;
+  background: yellow;
+}
+</style>
+
+<div class="cb">
+  <table data-expected-width="100">
+    <td><div class="content">abspos</div>
+    </td>
+  </table>
+</div>
+
+<script>
+  checkLayout("table");
+</script>

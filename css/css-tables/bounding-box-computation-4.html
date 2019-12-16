@@ -1,0 +1,34 @@
+<!doctype html>
+<script src='/resources/testharness.js'></script>
+<script src='/resources/testharnessreport.js'></script>
+<link rel='stylesheet' href='./support/base.css' />
+<link rel="help" href="https://drafts.csswg.org/css-tables-3/#bounding-box-assignment">
+<main>
+
+    <h1>Bounding box computation</h1>
+    <p>Checks that all table-internal boxes are positioned correctly</p>
+
+    <hr/>
+    <p>All row groups are empty, and should have size 0</p>
+     <x-table style="border-spacing: 10px; background: yellow; position: relative;border: 40px solid green; border-width: 20px 40px">
+        <x-thead></x-thead>
+        <x-tbody></x-tbody>
+        <x-tbody></x-tbody>
+        <x-tbody></x-tbody>
+        <x-tfoot></x-tfoot>
+    </x-table>
+
+</main>
+
+<script>
+test(function() {
+    let rowGroups = Array.from(document.querySelectorAll("x-table > *"));
+    for (var i=0; i<rowGroups.length; ++i) {
+        assert_equals(rowGroups[i].offsetWidth, 0, "empty row group " + i + " width is 0");
+        assert_equals(rowGroups[i].offsetHeight, 0, "empty row group " + i + " height is 0");
+    }
+    let table = document.querySelector("x-table");
+    assert_equals(table.offsetWidth, 80, "Table width is border width");
+    assert_equals(table.offsetHeight, 40, "Table height is border height");
+}, "Empty row groups size is 0");
+</script>

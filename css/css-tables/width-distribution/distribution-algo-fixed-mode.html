@@ -1,0 +1,93 @@
+<!doctype html>
+<script src='/resources/testharness.js'></script>
+<script src='/resources/testharnessreport.js'></script>
+<script src="/resources/check-layout-th.js"></script>
+<link rel='stylesheet' href='../support/base.css' />
+<link rel="author" title="Aleks Totic" href="atotic@chromium.org" />
+<link rel="help" href="https://drafts.csswg.org/css-tables-3/#width-distribution-in-fixed-mode" />
+
+<style>
+  table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: #DDD;
+    width: 300px;
+    outline: gray dotted 1px;
+  }
+  td {
+    padding: 0;
+  }
+  td:nth-child(1) {
+    background: #EEE;
+  }
+  td:nth-child(2) {
+    background: #DDD;
+  }
+  td:nth-child(3) {
+    background: #CCC;
+  }
+  .auto {
+    table-layout: auto;
+  }
+  .wide {
+    width: 180px;
+    background: rgba(0,255,0,0.3);
+  }
+  .narrow {
+    width: 10px;
+    background: rgba(0,0,255,0.3);
+  }
+  caption {
+    background: #BBB;
+  }
+</style>
+ <h1>Tests for redistribution of table width to column width.</h1>
+<p>Comparasance between table-layout:fixed and table-layout:auto redistributions</p>
+<p>All columns are unconstrained (no width or percentage):
+  <li>fixed sizes all columns to same size.</li>
+  <li>auto distributes widths proportional to max-width</li>
+</p>
+<table class="one">
+  <tbody>
+    <tr>
+      <td data-expected-width="100">
+        <div class="narrow">0,0</div>
+      </td>
+      <td data-expected-width="100">
+        <div class="narrow">0,1</div>
+      </td>
+      <td data-expected-width="100">
+        <div class="wide">0,2 wide</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table class="one auto">
+  <tbody>
+    <tr>
+      <td data-expected-width="15">
+        <div class="narrow">0,0</div>
+      </td>
+      <td data-expected-width="15">
+        <div class="narrow">0,1</div>
+      </td>
+      <td data-expected-width="270">
+        <div class="wide">0,2 wide</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>Caption wider than the table. Fixed width table wins.</p>
+<table class="two" data-expected-width="300">
+  <caption style="width:400px">400px caption</caption>
+  <tbody data-expected-width="300"><td>0,0</td></tbody>
+</table>
+<table class="two auto" data-expected-width="400">
+  <caption style="width:400px">400px caption</caption>
+  <tbody><td>0,0</td></tbody>
+</table>
+</table>
+<script>
+  checkLayout(".one");
+  checkLayout(".two");
+</script>
